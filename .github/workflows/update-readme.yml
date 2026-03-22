@@ -45,7 +45,7 @@ jobs:
             TOTAL_CONTRIBUTIONS=$((TOTAL_CONTRIBUTIONS + COUNT))
           done
 
-          # --- Language ranking (no percentages, just names) ---
+          # --- Language ranking ---
           LANG_TREE=$(GH_TOKEN="$GH_TOKEN_PAT" gh api graphql --paginate -f query='
             query($endCursor: String) {
               user(login: "ktmage") {
@@ -75,19 +75,44 @@ jobs:
             ) | .[]
           ')
 
+          # --- Build left column ---
+          LEFT=$(printf '%s\n' \
+            "★ ${STARS_TOTAL} stars" \
+            "$STARS_LINES" \
+            "" \
+            "● ${TOTAL_CONTRIBUTIONS} contributions")
+
+          # --- Build right column ---
+          RIGHT=$(printf '%s\n' \
+            "◆ Languages" \
+            "$LANG_TREE")
+
+          # --- Merge columns side by side ---
+          COL_WIDTH=28
+          COLUMNS=$(paste -d'\0' \
+            <(echo "$LEFT" | while IFS= read -r line || [ -n "$line" ]; do
+                # Pad each line to COL_WIDTH (using printf with enough spaces)
+                padded=$(printf "%-${COL_WIDTH}s" "$line")
+                echo "$padded"
+              done) \
+            <(echo "$RIGHT") | sed 's/[[:space:]]*$//')
+
+          # Handle unequal line counts
+          LEFT_COUNT=$(echo "$LEFT" | wc -l)
+          RIGHT_COUNT=$(echo "$RIGHT" | wc -l)
+          if [ "$RIGHT_COUNT" -gt "$LEFT_COUNT" ]; then
+            EXTRA=$(echo "$RIGHT" | tail -n +$((LEFT_COUNT + 1)) | while IFS= read -r line || [ -n "$line" ]; do
+              printf "%-${COL_WIDTH}s%s\n" "" "$line"
+            done)
+            COLUMNS=$(printf '%s\n%s' "$COLUMNS" "$EXTRA")
+          fi
+
           # --- Build README from template ---
           cp README.md.tpl README.md
-          sed -i "s|{{STARS_TOTAL}}|${STARS_TOTAL}|g" README.md
-          sed -i "s|{{CONTRIBUTIONS_TOTAL}}|${TOTAL_CONTRIBUTIONS}|g" README.md
 
-          echo "$STARS_LINES" > /tmp/stars_tree.txt
-          echo "$LANG_TREE" > /tmp/lang_tree.txt
-
-          STARS_TREE=$(cat /tmp/stars_tree.txt)
-          LANG_TREE_CONTENT=$(cat /tmp/lang_tree.txt)
-
-          awk -v val="$STARS_TREE" '{gsub(/\{\{STARS_TREE\}\}/, val); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
-          awk -v val="$LANG_TREE_CONTENT" '{gsub(/\{\{LANGUAGES_TREE\}\}/, val); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
+          echo "$COLUMNS" > /tmp/columns.txt
+          COLUMNS_CONTENT=$(cat /tmp/columns.txt)
+          awk -v val="$COLUMNS_CONTENT" '{gsub(/\{\{COLUMNS\}\}/, val); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
 
       - name: Commit and push if changed
         run: |

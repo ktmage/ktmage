@@ -3,12 +3,7 @@
 </a>
 
 <pre>
-★ {{STARS_TOTAL}} stars
-{{STARS_TREE}}
-● {{CONTRIBUTIONS_TOTAL}} contributions
-
-◆ Languages
-{{LANGUAGES_TREE}}
+{{COLUMNS}}
 </pre>
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
