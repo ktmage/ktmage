@@ -7,9 +7,12 @@
 ├─ mcp-google-tasks  2
 └─ opencode-gui  1
 
-⚡ 3009 contributions
-├─ TypeScript  297
-└─ Other  14
+⚡ 1722 contributions
+├─ TypeScript  706
+└─ Ruby  284
+├─ Shell  233
+├─ C#  118
+└─ Other  52
 
-👀 - views (14d)
+👀 0 views (14d)
 </pre>
