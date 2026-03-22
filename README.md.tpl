@@ -2,8 +2,8 @@
 
 ```js
 const ktmage = {
-  stars:         3,
-  contributions: 2996,
+  stars:         {{STARS}},
+  contributions: {{CONTRIBUTIONS}},
 };
 ```
 

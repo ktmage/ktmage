@@ -31,8 +31,7 @@ jobs:
             }
           ' --jq '.data.user.contributionsCollection.contributionCalendar.totalContributions')
 
-          sed -i "s/<!--START_SECTION:stars-->.*<!--END_SECTION:stars-->/<!--START_SECTION:stars-->${STARS}<!--END_SECTION:stars-->/" README.md
-          sed -i "s/<!--START_SECTION:contributions-->.*<!--END_SECTION:contributions-->/<!--START_SECTION:contributions-->${CONTRIBUTIONS}<!--END_SECTION:contributions-->/" README.md
+          sed "s/{{STARS}}/${STARS}/g; s/{{CONTRIBUTIONS}}/${CONTRIBUTIONS}/g" README.md.tpl > README.md
 
       - name: Commit and push if changed
         run: |
