@@ -6,7 +6,7 @@
 ★ 3 stars
 ├─ mcp-google-tasks  2
 └─ opencode-gui  1
-● 5330 contributions
+● 5332 contributions
 
 ◆ Languages
 ├─ TypeScript
@@ -14,5 +14,6 @@
 ├─ JavaScript
 ├─ HTML
 └─ CSS
-◎ 0 views (14d)
 </pre>
+
+![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
