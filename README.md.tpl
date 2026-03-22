@@ -9,5 +9,6 @@
 
 ◆ Languages
 {{LANGUAGES_TREE}}
-◎ {{VIEWS}} views (14d)
 </pre>
+
+![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
