@@ -9,10 +9,10 @@
 ├─ mcp-google-tasks  2      ├─ TypeScript
 └─ opencode-gui  1          ├─ Ruby
                             ├─ JavaScript
-● 5337 contributions        ├─ HTML
+● 5338 contributions        ├─ HTML
                             └─ CSS
 </pre>
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 ![Followers](https://img.shields.io/github/followers/ktmage?style=flat-square)
-![Email](https://img.shields.io/badge/email-yasashisainternet%40gmail.com-gray?style=flat-square)
+![Email](https://img.shields.io/badge/yasashisainternet%40gmail.com-gray?style=flat-square&logo=gmail&logoColor=white)
