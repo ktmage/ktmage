@@ -17,21 +17,66 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          STARS=$(gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
+          # Total stars
+          STARS_TOTAL=$(gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
 
-          CONTRIBUTIONS=$(gh api graphql -f query='
+          # Stars tree (repos with stars > 0, sorted desc)
+          STARS_LINES=$(gh api users/ktmage/repos --paginate --jq '
+            [.[] | select(.stargazers_count > 0)] | sort_by(-.stargazers_count) |
+            to_entries | map(
+              (if .key == (length - 1) then "└─ " else "├─ " end) +
+              .value.name + "  " + (.value.stargazers_count | tostring)
+            ) | .[]
+          ')
+
+          # Total contributions
+          CONTRIBUTIONS_TOTAL=$(gh api graphql -f query='
             query {
               user(login: "ktmage") {
                 contributionsCollection {
-                  contributionCalendar {
-                    totalContributions
-                  }
+                  contributionCalendar { totalContributions }
                 }
               }
             }
           ' --jq '.data.user.contributionsCollection.contributionCalendar.totalContributions')
 
-          sed "s/{{STARS}}/${STARS}/g; s/{{CONTRIBUTIONS}}/${CONTRIBUTIONS}/g" README.md.tpl > README.md
+          # Contributions by language tree
+          CONTRIB_LINES=$(gh api graphql -f query='
+            query {
+              user(login: "ktmage") {
+                contributionsCollection {
+                  commitContributionsByRepository(maxRepositories: 100) {
+                    repository { primaryLanguage { name } }
+                    contributions { totalCount }
+                  }
+                }
+              }
+            }
+          ' --jq '
+            .data.user.contributionsCollection.commitContributionsByRepository |
+            group_by(.repository.primaryLanguage.name) |
+            map({lang: (.[0].repository.primaryLanguage.name // "Other"), count: ([.[].contributions.totalCount] | add)}) |
+            sort_by(-.count) |
+            to_entries | map(
+              (if .key == (length - 1) then "└─ " else "├─ " end) +
+              .value.lang + "  " + (.value.count | tostring)
+            ) | .[]
+          ')
+
+          # Build README from template
+          cp README.md.tpl README.md
+          sed -i "s/{{STARS_TOTAL}}/${STARS_TOTAL}/g" README.md
+          sed -i "s/{{CONTRIBUTIONS_TOTAL}}/${CONTRIBUTIONS_TOTAL}/g" README.md
+
+          # Replace tree placeholders (multi-line, use temp files)
+          echo "$STARS_LINES" > /tmp/stars_tree.txt
+          echo "$CONTRIB_LINES" > /tmp/contrib_tree.txt
+
+          STARS_TREE=$(cat /tmp/stars_tree.txt)
+          CONTRIB_TREE=$(cat /tmp/contrib_tree.txt)
+
+          awk -v stars="$STARS_TREE" '{gsub(/\{\{STARS_TREE\}\}/, stars); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
+          awk -v contrib="$CONTRIB_TREE" '{gsub(/\{\{CONTRIBUTIONS_TREE\}\}/, contrib); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
 
       - name: Commit and push if changed
         run: |
