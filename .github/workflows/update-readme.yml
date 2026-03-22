@@ -76,8 +76,8 @@ jobs:
 
           # Build README from template
           cp README.md.tpl README.md
-          sed -i "s/{{STARS_TOTAL}}/${STARS_TOTAL}/g" README.md
-          sed -i "s/{{CONTRIBUTIONS_TOTAL}}/${CONTRIBUTIONS_TOTAL}/g" README.md
+          sed -i "s|{{STARS_TOTAL}}|${STARS_TOTAL}|g" README.md
+          sed -i "s|{{CONTRIBUTIONS_TOTAL}}|${CONTRIBUTIONS_TOTAL}|g" README.md
 
           # Replace tree placeholders (multi-line, use temp files)
           echo "$STARS_LINES" > /tmp/stars_tree.txt
@@ -88,7 +88,7 @@ jobs:
 
           awk -v stars="$STARS_TREE" '{gsub(/\{\{STARS_TREE\}\}/, stars); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
           awk -v contrib="$CONTRIB_TREE" '{gsub(/\{\{CONTRIBUTIONS_TREE\}\}/, contrib); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
-          sed -i "s/{{VIEWS}}/${VIEWS}/g" README.md
+          sed -i "s|{{VIEWS}}|${VIEWS}|g" README.md
 
       - name: Commit and push if changed
         run: |
