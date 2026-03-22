@@ -10,6 +10,6 @@
 ⚡ 2996 contributions
 ├─ TypeScript  297
 └─ Other  9
-</pre>
 
-![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
+👀 0 views (14d)
+</pre>

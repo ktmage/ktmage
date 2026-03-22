@@ -63,6 +63,17 @@ jobs:
             ) | .[]
           ')
 
+          # Views (14 days)
+          VIEWS=$(gh api repos/ktmage/ktmage/traffic/views --jq '.count')
+
+          # Limit trees to top 5
+          STARS_LINES=$(echo "$STARS_LINES" | head -5)
+          CONTRIB_LINES=$(echo "$CONTRIB_LINES" | head -5)
+
+          # Fix last line marker
+          STARS_LINES=$(echo "$STARS_LINES" | sed '$ s/├─/└─/')
+          CONTRIB_LINES=$(echo "$CONTRIB_LINES" | sed '$ s/├─/└─/')
+
           # Build README from template
           cp README.md.tpl README.md
           sed -i "s/{{STARS_TOTAL}}/${STARS_TOTAL}/g" README.md
@@ -77,6 +88,7 @@ jobs:
 
           awk -v stars="$STARS_TREE" '{gsub(/\{\{STARS_TREE\}\}/, stars); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
           awk -v contrib="$CONTRIB_TREE" '{gsub(/\{\{CONTRIBUTIONS_TREE\}\}/, contrib); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
+          sed -i "s/{{VIEWS}}/${VIEWS}/g" README.md
 
       - name: Commit and push if changed
         run: |
