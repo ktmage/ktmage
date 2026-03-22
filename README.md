@@ -3,17 +3,13 @@
 </a>
 
 <pre>
-★ 3 stars
-├─ mcp-google-tasks  2
-└─ opencode-gui  1
-● 5332 contributions
-
-◆ Languages
-├─ TypeScript
-├─ Ruby
-├─ JavaScript
-├─ HTML
+★ 3 stars                 ◆ Languages
+├─ mcp-google-tasks  2  ├─ TypeScript
+└─ opencode-gui  1      ├─ Ruby
+                            ├─ JavaScript
+● 5333 contributions      ├─ HTML
 └─ CSS
+                            └─ CSS
 </pre>
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
