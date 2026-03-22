@@ -1,10 +1,11 @@
 <div align="center">
 
+```js
+const ktmage = {
+  stars:         <!--START_SECTION:stars-->3<!--END_SECTION:stars-->,
+  contributions: <!--START_SECTION:contributions-->2996<!--END_SECTION:contributions-->,
+};
 ```
-$ cat ~/.stats
-```
-
-`⭐ ` <!--START_SECTION:stars-->3<!--END_SECTION:stars--> `stars` · `🔥 ` <!--START_SECTION:contributions-->2996<!--END_SECTION:contributions--> `contributions`
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 
