@@ -5,9 +5,9 @@
 <pre>
 ★ {{STARS_TOTAL}} stars
 {{STARS_TREE}}
-⚡ {{CONTRIBUTIONS_TOTAL}} contributions (all time)
+● {{CONTRIBUTIONS_TOTAL}} contributions
 
-📊 Languages
+◆ Languages
 {{LANGUAGES_TREE}}
-👀 {{VIEWS}} views (14d)
+◎ {{VIEWS}} views (14d)
 </pre>
