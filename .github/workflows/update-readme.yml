@@ -33,16 +33,19 @@ jobs:
             ) | .[]
           ')
 
-          # Total contributions
-          CONTRIBUTIONS_TOTAL=$(gh api graphql -f query='
+          # Total contributions (debug raw response)
+          CONTRIB_RAW=$(gh api graphql -f query='
             query {
               user(login: "ktmage") {
                 contributionsCollection {
                   contributionCalendar { totalContributions }
+                  restrictedContributionsCount
                 }
               }
             }
-          ' --jq '.data.user.contributionsCollection.contributionCalendar.totalContributions')
+          ')
+          echo "Raw contributions response: $CONTRIB_RAW"
+          CONTRIBUTIONS_TOTAL=$(echo "$CONTRIB_RAW" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions')
 
           # Contributions by language tree
           CONTRIB_LINES=$(gh api graphql -f query='
