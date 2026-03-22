@@ -61,7 +61,7 @@ jobs:
             }
           ' --jq '
             [.data.user.repositories.nodes[].languages.edges[] | {name: .node.name, size: .size}]
-          ' | jq -s '
+          ' | jq -rs '
             flatten |
             group_by(.name) |
             map({name: .[0].name, size: ([.[].size] | add)}) |
