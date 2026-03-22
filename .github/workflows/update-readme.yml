@@ -89,23 +89,25 @@ jobs:
 
           # --- Merge columns side by side ---
           COL_WIDTH=28
-          COLUMNS=$(paste -d'\0' \
-            <(echo "$LEFT" | while IFS= read -r line || [ -n "$line" ]; do
-                # Pad each line to COL_WIDTH (using printf with enough spaces)
-                padded=$(printf "%-${COL_WIDTH}s" "$line")
-                echo "$padded"
-              done) \
-            <(echo "$RIGHT") | sed 's/[[:space:]]*$//')
 
-          # Handle unequal line counts
-          LEFT_COUNT=$(echo "$LEFT" | wc -l)
-          RIGHT_COUNT=$(echo "$RIGHT" | wc -l)
-          if [ "$RIGHT_COUNT" -gt "$LEFT_COUNT" ]; then
-            EXTRA=$(echo "$RIGHT" | tail -n +$((LEFT_COUNT + 1)) | while IFS= read -r line || [ -n "$line" ]; do
-              printf "%-${COL_WIDTH}s%s\n" "" "$line"
-            done)
-            COLUMNS=$(printf '%s\n%s' "$COLUMNS" "$EXTRA")
-          fi
+          mapfile -t L_LINES <<< "$LEFT"
+          mapfile -t R_LINES <<< "$RIGHT"
+          L_COUNT=${#L_LINES[@]}
+          R_COUNT=${#R_LINES[@]}
+          MAX=$((L_COUNT > R_COUNT ? L_COUNT : R_COUNT))
+
+          COLUMNS=""
+          for ((i=0; i<MAX; i++)); do
+            l="${L_LINES[$i]:-}"
+            r="${R_LINES[$i]:-}"
+            # wc -m counts characters, not bytes
+            char_len=$(echo -n "$l" | wc -m | tr -d ' ')
+            spaces=$((COL_WIDTH - char_len))
+            if [ "$spaces" -lt 1 ]; then spaces=1; fi
+            pad=$(printf "%*s" "$spaces" "")
+            COLUMNS+="${l}${pad}${r}"$'\n'
+          done
+          COLUMNS=$(echo "$COLUMNS" | sed 's/[[:space:]]*$//')
 
           # --- Build README from template ---
           cp README.md.tpl README.md
