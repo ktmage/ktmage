@@ -15,7 +15,7 @@ jobs:
 
       - name: Fetch stats and update README
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
           # Total stars
           STARS_TOTAL=$(gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
@@ -63,8 +63,8 @@ jobs:
             ) | .[]
           ')
 
-          # Views (14 days)
-          VIEWS=$(gh api repos/ktmage/ktmage/traffic/views --jq '.count')
+          # Views (14 days) - requires PAT with repo scope
+          VIEWS=$(gh api repos/ktmage/ktmage/traffic/views --jq '.count' 2>/dev/null || echo "n/a")
 
           # Limit trees to top 5
           STARS_LINES=$(echo "$STARS_LINES" | head -5)
