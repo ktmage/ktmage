@@ -3,7 +3,8 @@
 </a>
 
 <pre>
-$ stats
+─ stats ─
+
 {{COLUMNS}}
 </pre>
 
