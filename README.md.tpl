@@ -10,4 +10,4 @@
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 ![Followers](https://img.shields.io/github/followers/ktmage?style=flat-square)
-![Email](https://img.shields.io/badge/email-yasashisainternet%40gmail.com-gray?style=flat-square)
+![Email](https://img.shields.io/badge/yasashisainternet%40gmail.com-gray?style=flat-square&logo=gmail&logoColor=white)
