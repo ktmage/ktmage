@@ -2,12 +2,9 @@
 <tr>
 <td valign="top">
 
-### `> stats`
+<samp>★ {{STARS}} stars · ⚡ {{CONTRIBUTIONS}} contributions</samp>
 
-| | |
-|---|---|
-| **★** Stars | **{{STARS}}** |
-| **⚡** Contributions | **{{CONTRIBUTIONS}}** |
+<br>
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 

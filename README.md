@@ -2,12 +2,9 @@
 <tr>
 <td valign="top">
 
-### `> stats`
+<samp>★ 3 stars · ⚡ 2996 contributions</samp>
 
-| | |
-|---|---|
-| **★** Stars | **3** |
-| **⚡** Contributions | **2996** |
+<br>
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 
