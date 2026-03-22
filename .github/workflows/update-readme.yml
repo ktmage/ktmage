@@ -15,91 +15,87 @@ jobs:
 
       - name: Fetch stats and update README
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN_DEFAULT: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN_PAT: ${{ secrets.GH_PAT }}
         run: |
-          # Debug: verify token
-          echo "Authenticated as: $(gh api user --jq '.login')"
-          echo "Token scopes: $(gh api -i user 2>&1 | grep -i 'x-oauth-scopes')"
+          # --- Stars (public, either token works) ---
+          STARS_TOTAL=$(GH_TOKEN="$GH_TOKEN_DEFAULT" gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
 
-          # Total stars
-          STARS_TOTAL=$(gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
-
-          # Stars tree (repos with stars > 0, sorted desc)
-          STARS_LINES=$(gh api users/ktmage/repos --paginate --jq '
+          STARS_LINES=$(GH_TOKEN="$GH_TOKEN_DEFAULT" gh api users/ktmage/repos --paginate --jq '
             [.[] | select(.stargazers_count > 0)] | sort_by(-.stargazers_count) |
             to_entries | map(
               (if .key == (length - 1) then "└─ " else "├─ " end) +
               .value.name + "  " + (.value.stargazers_count | tostring)
             ) | .[]
           ')
+          STARS_LINES=$(echo "$STARS_LINES" | head -5)
+          STARS_LINES=$(echo "$STARS_LINES" | sed '$ s/├─/└─/')
 
-          # Total contributions (debug raw response)
-          CONTRIB_RAW=$(gh api graphql -f query='
-            query {
-              user(login: "ktmage") {
-                contributionsCollection {
-                  contributionCalendar { totalContributions }
-                  restrictedContributionsCount
-                }
-              }
-            }
-          ')
-          echo "Raw contributions response: $CONTRIB_RAW"
-          CONTRIBUTIONS_TOTAL=$(echo "$CONTRIB_RAW" | jq -r '.data.user.contributionsCollection.contributionCalendar.totalContributions')
+          # --- All-time contributions (use GITHUB_TOKEN for profile-equivalent count) ---
+          CREATED_YEAR=$(GH_TOKEN="$GH_TOKEN_DEFAULT" gh api users/ktmage --jq '.created_at[:4]')
+          CURRENT_YEAR=$(date -u +%Y)
+          TOTAL_CONTRIBUTIONS=0
 
-          # Contributions by language tree
-          CONTRIB_LINES=$(gh api graphql -f query='
-            query {
+          for YEAR in $(seq "$CREATED_YEAR" "$CURRENT_YEAR"); do
+            FROM="${YEAR}-01-01T00:00:00Z"
+            TO="${YEAR}-12-31T23:59:59Z"
+            COUNT=$(GH_TOKEN="$GH_TOKEN_DEFAULT" gh api graphql \
+              -f query="query { user(login: \"ktmage\") { contributionsCollection(from: \"${FROM}\", to: \"${TO}\") { contributionCalendar { totalContributions } } } }" \
+              --jq '.data.user.contributionsCollection.contributionCalendar.totalContributions')
+            TOTAL_CONTRIBUTIONS=$((TOTAL_CONTRIBUTIONS + COUNT))
+          done
+
+          # --- Language usage ranking (use PAT to include private repos) ---
+          LANG_TREE=$(GH_TOKEN="$GH_TOKEN_PAT" gh api graphql --paginate -f query='
+            query($endCursor: String) {
               user(login: "ktmage") {
-                contributionsCollection {
-                  commitContributionsByRepository(maxRepositories: 100) {
-                    repository { primaryLanguage { name } }
-                    contributions { totalCount }
+                repositories(first: 100, after: $endCursor, ownerAffiliations: OWNER, isFork: false) {
+                  pageInfo { hasNextPage endCursor }
+                  nodes {
+                    languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                      edges { size node { name } }
+                    }
                   }
                 }
               }
             }
           ' --jq '
-            .data.user.contributionsCollection.commitContributionsByRepository |
-            group_by(.repository.primaryLanguage.name) |
-            map({lang: (.[0].repository.primaryLanguage.name // "Other"), count: ([.[].contributions.totalCount] | add)}) |
-            sort_by(-.count) |
+            [.data.user.repositories.nodes[].languages.edges[] | {name: .node.name, size: .size}]
+          ' | jq -s '
+            flatten |
+            group_by(.name) |
+            map({name: .[0].name, size: ([.[].size] | add)}) |
+            sort_by(-.size) |
+            . as $all |
+            ($all | map(.size) | add) as $total |
+            [.[:5][] | {name, pct: ((.size / $total * 100 * 10 | round) / 10)}] |
             to_entries | map(
               (if .key == (length - 1) then "└─ " else "├─ " end) +
-              .value.lang + "  " + (.value.count | tostring)
+              .value.name + "  " + (.value.pct | tostring) + "%"
             ) | .[]
           ')
 
-          # Views (14 days) - requires PAT with repo scope
-          if VIEWS_RAW=$(gh api repos/ktmage/ktmage/traffic/views --jq '.count' 2>/dev/null); then
+          # --- Views (14 days, requires PAT) ---
+          if VIEWS_RAW=$(GH_TOKEN="$GH_TOKEN_PAT" gh api repos/ktmage/ktmage/traffic/views --jq '.count' 2>/dev/null); then
             VIEWS="$VIEWS_RAW"
           else
             VIEWS="-"
           fi
 
-          # Limit trees to top 5
-          STARS_LINES=$(echo "$STARS_LINES" | head -5)
-          CONTRIB_LINES=$(echo "$CONTRIB_LINES" | head -5)
-
-          # Fix last line marker
-          STARS_LINES=$(echo "$STARS_LINES" | sed '$ s/├─/└─/')
-          CONTRIB_LINES=$(echo "$CONTRIB_LINES" | sed '$ s/├─/└─/')
-
-          # Build README from template
+          # --- Build README from template ---
           cp README.md.tpl README.md
           sed -i "s|{{STARS_TOTAL}}|${STARS_TOTAL}|g" README.md
-          sed -i "s|{{CONTRIBUTIONS_TOTAL}}|${CONTRIBUTIONS_TOTAL}|g" README.md
+          sed -i "s|{{CONTRIBUTIONS_TOTAL}}|${TOTAL_CONTRIBUTIONS}|g" README.md
+          sed -i "s|{{VIEWS}}|${VIEWS}|g" README.md
 
-          # Replace tree placeholders (multi-line, use temp files)
           echo "$STARS_LINES" > /tmp/stars_tree.txt
-          echo "$CONTRIB_LINES" > /tmp/contrib_tree.txt
+          echo "$LANG_TREE" > /tmp/lang_tree.txt
 
           STARS_TREE=$(cat /tmp/stars_tree.txt)
-          CONTRIB_TREE=$(cat /tmp/contrib_tree.txt)
+          LANG_TREE_CONTENT=$(cat /tmp/lang_tree.txt)
 
-          awk -v stars="$STARS_TREE" '{gsub(/\{\{STARS_TREE\}\}/, stars); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
-          awk -v contrib="$CONTRIB_TREE" '{gsub(/\{\{CONTRIBUTIONS_TREE\}\}/, contrib); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
-          sed -i "s|{{VIEWS}}|${VIEWS}|g" README.md
+          awk -v val="$STARS_TREE" '{gsub(/\{\{STARS_TREE\}\}/, val); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
+          awk -v val="$LANG_TREE_CONTENT" '{gsub(/\{\{LANGUAGES_TREE\}\}/, val); print}' README.md > /tmp/readme_tmp && mv /tmp/readme_tmp README.md
 
       - name: Commit and push if changed
         run: |
