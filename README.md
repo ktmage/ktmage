@@ -3,12 +3,13 @@
 </a>
 
 <pre>
-$ stats
+─ stats ─
+
 ★ 3 stars                   ◆ Languages
 ├─ mcp-google-tasks  2      ├─ TypeScript
 └─ opencode-gui  1          ├─ Ruby
                             ├─ JavaScript
-● 5335 contributions        ├─ HTML
+● 5336 contributions        ├─ HTML
                             └─ CSS
 </pre>
 
