@@ -6,13 +6,13 @@
 ★ 3 stars
 ├─ mcp-google-tasks  2
 └─ opencode-gui  1
-⚡ 5327 contributions (all time)
+⚡ 5328 contributions (all time)
 
 📊 Languages
-"├─ TypeScript  64.4%"
-"└─ Ruby  9.5%"
-"├─ JavaScript  6%"
-"├─ HTML  5.8%"
-"├─ CSS  4.8%"
+├─ TypeScript  64.4%
+└─ Ruby  9.5%
+├─ JavaScript  6%
+├─ HTML  5.8%
+├─ CSS  4.8%
 👀 0 views (14d)
 </pre>
