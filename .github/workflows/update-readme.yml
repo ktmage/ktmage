@@ -1,0 +1,41 @@
+name: Update README Stats
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch stats and update README
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          STARS=$(gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
+
+          CONTRIBUTIONS=$(gh api graphql -f query='
+            query {
+              user(login: "ktmage") {
+                contributionsCollection {
+                  contributionCalendar {
+                    totalContributions
+                  }
+                }
+              }
+            }
+          ' --jq '.data.user.contributionsCollection.contributionCalendar.totalContributions')
+
+          sed -i "s/<!--START_SECTION:stars-->.*<!--END_SECTION:stars-->/<!--START_SECTION:stars-->${STARS}<!--END_SECTION:stars-->/" README.md
+          sed -i "s/<!--START_SECTION:contributions-->.*<!--END_SECTION:contributions-->/<!--START_SECTION:contributions-->${CONTRIBUTIONS}<!--END_SECTION:contributions-->/" README.md
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet || (git add README.md && git commit -m "update stats" && git push)
