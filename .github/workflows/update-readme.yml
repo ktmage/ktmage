@@ -64,7 +64,11 @@ jobs:
           ')
 
           # Views (14 days) - requires PAT with repo scope
-          VIEWS=$(gh api repos/ktmage/ktmage/traffic/views --jq '.count' 2>/dev/null || echo "n/a")
+          if VIEWS_RAW=$(gh api repos/ktmage/ktmage/traffic/views --jq '.count' 2>/dev/null); then
+            VIEWS="$VIEWS_RAW"
+          else
+            VIEWS="-"
+          fi
 
           # Limit trees to top 5
           STARS_LINES=$(echo "$STARS_LINES" | head -5)

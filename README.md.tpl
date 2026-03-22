@@ -5,7 +5,9 @@
 <pre>
 ★ {{STARS_TOTAL}} stars
 {{STARS_TREE}}
+
 ⚡ {{CONTRIBUTIONS_TOTAL}} contributions
 {{CONTRIBUTIONS_TREE}}
+
 👀 {{VIEWS}} views (14d)
 </pre>
