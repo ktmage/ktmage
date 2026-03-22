@@ -6,10 +6,8 @@
 ★ 3 stars
 ├─ mcp-google-tasks  2
 └─ opencode-gui  1
-
-⚡ 2996 contributions
+⚡ 3008 contributions
 ├─ TypeScript  297
-└─ Other  9
-
-👀 0 views (14d)
+└─ Other  13
+👀 {"message":"Resource not accessible by integration","documentation_url":"https://docs.github.com/rest/metrics/traffic#get-page-views","status":"403"}n/a views (14d)
 </pre>
