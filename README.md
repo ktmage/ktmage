@@ -1,4 +1,4 @@
-<!--START_SECTION:stars-->0<!--END_SECTION:stars--> stars · <!--START_SECTION:contributions-->0<!--END_SECTION:contributions--> contributions
+<!--START_SECTION:stars-->3<!--END_SECTION:stars--> stars · <!--START_SECTION:contributions-->2996<!--END_SECTION:contributions--> contributions
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 
