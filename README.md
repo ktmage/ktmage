@@ -1,14 +1,21 @@
-<div align="center">
+<table align="center">
+<tr>
+<td valign="top">
 
-```js
-const ktmage = {
-  stars:         3,
-  contributions: 2996,
-};
-```
+### `> stats`
+
+| | |
+|---|---|
+| **★** Stars | **3** |
+| **⚡** Contributions | **2996** |
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ktmage&style=flat-square)
 
+</td>
+<td valign="top">
+
 [![Spotify recently played](https://spotify-recently-played-readme.vercel.app/api?user=9p84tsq454e526378c6fzkg06&count=5)](https://open.spotify.com/user/9p84tsq454e526378c6fzkg06)
 
-</div>
+</td>
+</tr>
+</table>
