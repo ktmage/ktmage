@@ -17,6 +17,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
+          # Debug: verify token
+          echo "Authenticated as: $(gh api user --jq '.login')"
+          echo "Token scopes: $(gh api -i user 2>&1 | grep -i 'x-oauth-scopes')"
+
           # Total stars
           STARS_TOTAL=$(gh api users/ktmage/repos --paginate --jq '[.[].stargazers_count] | add // 0')
 
