@@ -77,7 +77,7 @@ jobs:
 
           # --- Views (14 days, all repos combined) ---
           TOTAL_VIEWS=0
-          REPOS=$(GH_TOKEN="$GH_TOKEN_PAT" gh api user/repos --paginate --jq '.[].name')
+          REPOS=$(GH_TOKEN="$GH_TOKEN_PAT" gh api user/repos --paginate -f affiliation=owner --jq '.[].name')
           for REPO in $REPOS; do
             V=$(GH_TOKEN="$GH_TOKEN_PAT" gh api "repos/ktmage/${REPO}/traffic/views" --jq '.count' 2>/dev/null || echo 0)
             TOTAL_VIEWS=$((TOTAL_VIEWS + V))
