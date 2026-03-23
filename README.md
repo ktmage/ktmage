@@ -13,6 +13,6 @@
 ├─ mcp-google-tasks  2      ├─ TypeScript
 └─ opencode-gui  1          ├─ Ruby
                             ├─ JavaScript
-● 5339 contributions        ├─ HTML
-                            └─ CSS
+● 5472 contributions        ├─ CSS
+                            └─ C#
 </pre>
