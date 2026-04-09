@@ -11,8 +11,8 @@
 
 ★ 3 stars                   ◆ Languages
 ├─ mcp-google-tasks  2      ├─ TypeScript
-└─ opencode-gui  1          ├─ C
-                            ├─ Zig
-● 6049 contributions        ├─ Ruby
-                            └─ JavaScript
+└─ opencode-gui  1          ├─ Zig
+                            ├─ Ruby
+● 6068 contributions        ├─ JavaScript
+                            └─ CSS
 </pre>
