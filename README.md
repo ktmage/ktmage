@@ -9,9 +9,9 @@
 <pre>
 ─ stats ─
 
-★ 5 stars                   ◆ Languages
-├─ opencode-gui  3          ├─ TypeScript
-└─ mcp-google-tasks  2      ├─ Zig
+★ 6 stars                   ◆ Languages
+├─ mcp-google-tasks  3      ├─ TypeScript
+└─ opencode-gui  3          ├─ Zig
                             ├─ Ruby
 ● 6497 contributions        ├─ JavaScript
                             └─ CSS
