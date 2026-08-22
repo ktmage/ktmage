@@ -13,6 +13,6 @@
 ├─ opencode-gui  3          ├─ TypeScript
 └─ mcp-google-tasks  2      ├─ JavaScript
                             ├─ Zig
-● 6628 contributions        ├─ CSS
-                            └─ Ruby
+● 6633 contributions        ├─ Ruby
+                            └─ HTML
 </pre>
