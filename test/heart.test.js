@@ -36,9 +36,9 @@ test('共有辺は一度だけ描き、手前の面に隠れる線を取り除�
 });
 
 test('公開 SVG を小さな透明のハートだけにし、低減モーションに対応する', async () => {
-  const svg = await readFile(new URL('../assets/profile.svg', import.meta.url), 'utf8');
+  const svg = await readFile(new URL('../assets/heart.svg', import.meta.url), 'utf8');
   assert.match(svg, /width="240" height="240"/);
   assert.equal(XMLValidator.validate(svg), true);
-  assert.doesNotMatch(svg, /<(rect|image|foreignObject|script|text)\b|fill="(?!none")/);
+  assert.doesNotMatch(svg, /<(rect|image|foreignObject|script|text)\b/);
   assert.match(svg, /prefers-reduced-motion:reduce/);
 });

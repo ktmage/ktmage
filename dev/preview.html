@@ -8,9 +8,9 @@
 </style>
 </head><body><main>
 <header><h1>ポリゴンハート</h1><nav aria-label="確認用の背景"><button id="checker" aria-pressed="false">透明確認</button><button id="white" aria-pressed="false">白背景</button><button id="black" aria-pressed="true">黒背景</button></nav></header>
-<div id="stage" class="stage black"><img id="art" src="/heart.svg" alt="回転する赤いポリゴンハート"></div>
-<footer><span>背景は透明 / 6秒で一周</span><a href="/heart.svg" download="profile.svg">SVG をダウンロード</a></footer>
-<details><summary>表示内容と作り方</summary><p>いただいた参考画像の頂点配置と三角形の分割に合わせて、前面・背面を持つ28頂点・52面の立体にしました。共有する辺は一度だけ描き、裏に隠れる線は <a href="https://threejs.org/docs/pages/Ray.html">Three.js の Ray.intersectTriangle</a> による遮蔽判定で取り除いています。</p><p>6秒の一周を144フレームで再生します。SVG の背景とハートの面は透明です。市松模様・白・黒は、この確認画面だけの背景です。「動きを減らす」設定では正面で静止します。</p></details>
+<div id="stage" class="stage black"><img id="art" src="/heart.svg" alt="赤からピンクの面で構成した、回転するポリゴンハート"></div>
+<footer><span>背景は透明 / 6秒で一周</span><a href="/heart.svg" download="heart.svg">SVG をダウンロード</a></footer>
+<details><summary>表示内容と作り方</summary><p>いただいた参考画像の頂点配置と三角形の分割に合わせて、前面・背面を持つ28頂点・52面の立体にしました。共有する辺は一度だけ描き、裏に隠れる線は <a href="https://threejs.org/docs/pages/Ray.html">Three.js の Ray.intersectTriangle</a> による遮蔽判定で取り除いています。</p><p>6秒の一周を144フレームで再生します。各面を少しずつ違う赤〜ピンクで塗り、周囲は透明にしています。市松模様・白・黒は、この確認画面だけの背景です。「動きを減らす」設定では正面で静止します。</p></details>
 </main><script>
 for(const name of ['checker','white','black'])document.getElementById(name).addEventListener('click',()=>{document.getElementById('stage').className='stage '+name;for(const id of ['checker','white','black'])document.getElementById(id).setAttribute('aria-pressed',id===name)});
 </script></body></html>

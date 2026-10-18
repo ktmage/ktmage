@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 const files = new Map([
   ['/', ['./preview.html', 'text/html']],
-  ['/heart.svg', ['../assets/profile.svg', 'image/svg+xml']],
+  ['/heart.svg', ['../assets/heart.svg', 'image/svg+xml']],
 ]);
 const server = createServer(async (req, res) => {
   const file = files.get(new URL(req.url, 'http://localhost').pathname);
