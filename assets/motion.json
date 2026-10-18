@@ -1,0 +1,7 @@
+{
+  "normalPeriod": 7.5,
+  "burstDuration": 3,
+  "burstTurns": 3,
+  "intervalTurns": 3,
+  "easeDuration": 1.5
+}

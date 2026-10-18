@@ -14,7 +14,8 @@ const light = new Vector3(-.4, .7, 1).normalize();
 const palette = ['#e94b63', '#e5455c', '#df3953', '#ed566b', '#dc344f', '#e3415b', '#f06073'];
 const coordinate = (point) => `${((point.x + 1) * 240).toFixed(2)},${((1 - point.y) * 240).toFixed(2)}`;
 const frames = Array.from({ length: frameCount }, (_, i) => {
-  const rotated = points.map((point) => point.clone().applyAxisAngle(axis, i * 2 * Math.PI / frameCount));
+  const angle = i * 2 * Math.PI / frameCount;
+  const rotated = points.map((point) => point.clone().applyAxisAngle(axis, angle));
   const facets = faces.map((face, index) => {
     const vertices = face.map((vertex) => rotated[vertex]);
     const [a, b, c] = vertices;
@@ -23,9 +24,10 @@ const frames = Array.from({ length: frameCount }, (_, i) => {
     const color = new Color(palette[(index * 11 + Math.floor(index / 3)) % palette.length]);
     color.multiplyScalar(.78 + .22 * Math.max(0, normal.dot(light)));
     const fill = `#${color.getHexString()}`;
+    const projected = vertices.map((point) => coordinate(point.clone().project(camera))).join(' ');
     return {
       depth: (a.z + b.z + c.z) / 3,
-      svg: `<polygon points="${vertices.map((point) => coordinate(point.clone().project(camera))).join(' ')}" fill="${fill}" stroke="${fill}" stroke-width=".65"/>`,
+      svg: `<polygon points="${projected}" fill="${fill}" stroke="${fill}" stroke-width=".65"/>`,
     };
   }).filter(Boolean).sort((a, b) => a.depth - b.depth).map((face) => face.svg).join('');
   const edges = visibleEdges(rotated, faces, camera);
@@ -35,7 +37,7 @@ const asset = {
   source: 'User-provided polygon-heart reference, 2026-10-18',
   licenseUrl: '',
   copyright: 'Topology adapted from the user-provided reference; added depth, Y-axis rotation, flat face colors and hidden-line removal.',
-  width: 480, height: 480, duration: 6, triangles: faces.length, vertices: points.length, frameCount, frames,
+  width: 480, height: 480, triangles: faces.length, vertices: points.length, frameCount, frames,
 };
 await writeFile(new URL('../assets/heart.json', import.meta.url), JSON.stringify(asset));
 console.log(JSON.stringify({ frames: frameCount, triangles: asset.triangles, vertices: asset.vertices, bytes: JSON.stringify(asset).length }));
