@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STARS_TOTAL=$(gh api users/ktmage/repos --paginate --slurp --jq '[.[][] | .stargazers_count] | add // 0')
+STARS_TOTAL=$(gh api users/ktmage/repos --paginate | jq -s '[.[][] | .stargazers_count] | add // 0')
 CREATED_YEAR=$(gh api users/ktmage --jq '.created_at[:4]')
 CURRENT_YEAR=$(date -u +%Y)
 TOTAL_CONTRIBUTIONS=0
