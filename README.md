@@ -11,8 +11,8 @@
 
 ★ 5 stars                   ◆ Languages
 ├─ opencode-gui  3          ├─ JavaScript
-└─ mcp-google-tasks  2      ├─ TypeScript
-                            ├─ MoonBit
-● 7519 contributions        ├─ Zig
+└─ mcp-google-tasks  2      ├─ MoonBit
+                            ├─ TypeScript
+● 7592 contributions        ├─ Zig
                             └─ CSS
 </pre>
