@@ -1,0 +1,19 @@
+{
+  "name": "ktmage-profile-art",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --watch dev/server.js",
+    "test": "node --test",
+    "check": "node --check src/heart-svg.js && node --check src/sculpture.js && node --check dev/server.js && node --check scripts/render-profile.mjs && node --check scripts/bake-heart.mjs && node --check scripts/heart-mesh.mjs && node --check scripts/hidden-lines.mjs",
+    "build:art": "node scripts/bake-heart.mjs",
+    "build:profile": "node scripts/render-profile.mjs"
+  },
+  "devDependencies": {
+    "fast-xml-parser": "5.11.2",
+    "three": "0.186.1"
+  }
+}

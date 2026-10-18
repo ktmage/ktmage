@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ポリゴンハート — 透明 SVG</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101010;color:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}main{max-width:720px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}h1{font-size:15px;font-weight:500;margin:0}nav{display:flex;gap:6px}button{border:1px solid #555;background:transparent;padding:7px 11px;font:12px inherit;color:inherit;cursor:pointer}button[aria-pressed=true]{border-color:#eee;background:#eee;color:#111}.stage{width:min(100%,480px,calc(100svh - 200px));aspect-ratio:1;margin:0 auto;background-color:#fff;background-image:conic-gradient(#e6e6e6 25%,transparent 0 50%,#e6e6e6 0 75%,transparent 0);background-size:24px 24px}.stage.white{background:#fff}.stage.black{background:#101010}.stage img{width:100%;height:100%;display:block}footer{margin-top:22px;display:flex;justify-content:space-between;gap:16px;align-items:center;font-size:12px;color:#aaa}a{color:#eee;text-underline-offset:3px}details{margin-top:28px;font-size:12px;line-height:1.8;color:#aaa}summary{cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid #e00029;outline-offset:3px}@media(max-width:540px){main{padding:20px 12px}header{align-items:start;flex-direction:column}.stage{width:min(100%,480px,calc(100svh - 240px))}footer{flex-wrap:wrap}}
+</style>
+</head><body><main>
+<header><h1>ポリゴンハート</h1><nav aria-label="確認用の背景"><button id="checker" aria-pressed="false">透明確認</button><button id="white" aria-pressed="false">白背景</button><button id="black" aria-pressed="true">黒背景</button></nav></header>
+<div id="stage" class="stage black"><img id="art" src="/heart.svg" alt="回転する赤いポリゴンハートに、黒い文字背景と白い stars・contributions を重ねた SVG"></div>
+<footer><span>文字の背面だけ黒 / 周囲は透明 / 6秒で一周</span><a href="/heart.svg" download="profile.svg">SVG をダウンロード</a></footer>
+<details><summary>表示内容と作り方</summary><p>stars と contributions は <a href="https://github.com/ktmage/ktmage/blob/master/.github/workflows/update-readme.yml">既存の集計処理</a> が毎日生成する SVG をそのまま表示しています。contributions はアカウント作成からの全期間合計です。GitHub Actions で数値を埋め込むため、画像用サーバーは不要です。</p><p>いただいた参考画像の頂点配置と三角形の分割に合わせて、前面・背面を持つ28頂点・52面の立体にしました。共有する辺は一度だけ描き、裏に隠れる線は <a href="https://threejs.org/docs/pages/Ray.html">Three.js の Ray.intersectTriangle</a> による遮蔽判定で取り除いています。</p><p>6秒の一周を144フレームで再生します。SVG は文字の背面だけ黒く塗り、周囲とハートの面は透明です。市松模様・白・黒は、この確認画面だけの背景です。「動きを減らす」設定では正面で静止します。</p></details>
+</main><script>
+for(const name of ['checker','white','black'])document.getElementById(name).addEventListener('click',()=>{document.getElementById('stage').className='stage '+name;for(const id of ['checker','white','black'])document.getElementById(id).setAttribute('aria-pressed',id===name)});
+</script></body></html>
